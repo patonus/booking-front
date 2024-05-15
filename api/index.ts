@@ -10,5 +10,11 @@ const axiosConfig: CreateAxiosDefaults = {
 }
 const apiClient = axios.create(axiosConfig)
 
-export const getReservations = () =>
-	apiClient.get<ApiPage<Reservation>>('/reservations').then(({ data }) => data)
+export const getReservations = (page: number) =>
+	apiClient
+		.get<ApiPage<Reservation>>('/reservations', {
+			params: {
+				page: page,
+			},
+		})
+		.then(({ data }) => data)

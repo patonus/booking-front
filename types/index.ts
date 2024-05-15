@@ -7,4 +7,5 @@ export type Reservation = {
 
 export type ApiPage<Data extends Record<string, unknown>> = {
 	data: Data[]
+	last_page: number
 }

@@ -31,7 +31,6 @@ const ReservationForm = () => {
 			count: 1,
 		},
 	})
-	console.log(errors)
 	const mutation = useMutation<Reservation[], Error, ReservationData>({
 		mutationFn: storeReservations,
 	})
@@ -45,13 +44,20 @@ const ReservationForm = () => {
 			},
 			onError: (e) => {
 				if (!axios.isAxiosError(e)) {
-					setError('form', {
+					setError('root', {
 						type: 'network',
 						message: e.message,
 					})
 					return
 				}
-				const errors = e.response?.data?.errors || {}
+				const errorData = e.response?.data || {}
+				if (errorData.error) {
+					setError('root', {
+						type: 'api',
+						message: errorData.error,
+					})
+				}
+				const errors = errorData.errors || {}
 				Object.entries(errors).forEach(([key, value]) => {
 					if (isFormField(key)) {
 						setError(key, {
@@ -128,8 +134,15 @@ const ReservationForm = () => {
 					</div>
 					<input
 						type='number'
+						min={1}
 						className='input input-bordered w-full'
-						{...register('count', { required: true, min: 1 })}
+						{...register('count', {
+							required: true,
+							min: {
+								value: 1,
+								message: 'Must be at leas 1',
+							},
+						})}
 					/>
 				</label>
 
@@ -137,6 +150,9 @@ const ReservationForm = () => {
 					<p className='text-red-500 text-sm'>{errors.count.message}</p>
 				)}
 			</div>
+			{errors.root && (
+				<p className='text-red-500 text-sm mb-3'>{errors.root.message}</p>
+			)}
 			<button type='submit' className='btn btn-primary w-full'>
 				Create reservation
 			</button>

@@ -1,6 +1,5 @@
-import { ApiPage, Reservation } from '@/types'
+import { ApiPage, Reservation, ReservationData } from '@/types'
 import axios, { CreateAxiosDefaults } from 'axios'
-import Router from 'next/router'
 
 export const BASE_URL = process.env.NEXT_PUBLIC_API_URL
 
@@ -18,3 +17,6 @@ export const getReservations = (page: number) =>
 			},
 		})
 		.then(({ data }) => data)
+
+export const storeReservations = (data: ReservationData) =>
+	apiClient.post<Reservation[]>('/reservations', data).then(({ data }) => data)

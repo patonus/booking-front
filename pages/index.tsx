@@ -1,3 +1,4 @@
+import ReservationForm from '@/components/ReservationForm'
 import ReservationList from '@/components/ReservationList'
 import Link from 'next/link'
 
@@ -14,6 +15,7 @@ export default function Home() {
 				</nav>
 			</header>
 			<main className='p-6'>
+				<ReservationForm />
 				<ReservationList />
 			</main>
 		</div>
